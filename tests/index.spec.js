@@ -54,16 +54,49 @@ describe('InnerImageZoom', function () {
 
   describe('mount', () => {
     describe('container', () => {
-      it('renders a figure', () => {
+      const baseClass = 'iiz';
+      const dragClass = 'iiz--drag';
+      const customClass = 'custom';
+
+      it('renders', () => {
         innerImageZoom();
         const figure = findRenderedDOMComponentWithTag(component, 'figure');
         expect(figure).toExist();
       });
 
-      it('renders a figure with a custom classname', () => {
-        innerImageZoom({ className: 'custom' });
+      it('renders and has the class "iiz"', () => {
+        innerImageZoom();
         const figure = findRenderedDOMComponentWithTag(component, 'figure');
-        expect(figure.classList.contains('custom')).toBe(true);
+        expect(figure.classList.contains(baseClass)).toBe(true);
+        expect(figure.className).toBe(baseClass, 'excess characters present');
+      });
+
+      it('renders with an additional custom class name', () => {
+        innerImageZoom({ className: customClass });
+        const figure = findRenderedDOMComponentWithTag(component, 'figure');
+        expect(figure.classList.contains(baseClass) && figure.classList.contains(customClass)).toBe(true);
+        expect(figure.className.length).toBe(baseClass.length + customClass.length + 1, 'excess characters present');
+      });
+
+      it('renders with an additional custom class name and a drag class', () => {
+        innerImageZoom({ className: customClass, moveType: 'drag' });
+        const figure = findRenderedDOMComponentWithTag(component, 'figure');
+        expect(
+          figure.classList.contains(baseClass) &&
+            figure.classList.contains(customClass) &&
+            figure.classList.contains(dragClass)
+        ).toBe(true);
+        expect(figure.className.length).toBe(
+          baseClass.length + dragClass.length + customClass.length + 2,
+          'excess characters present'
+        );
+      });
+
+      it('renders with a specified width in pixels', () => {
+        const width = 600;
+        innerImageZoom({ width: width });
+        const figure = findRenderedDOMComponentWithTag(component, 'figure');
+        expect(figure.style.width).toBe(width + 'px');
       });
     });
 
@@ -110,12 +143,18 @@ describe('InnerImageZoom', function () {
         const paddingTop = wrapper.style['padding-top'];
         expect(paddingTop.substring(paddingTop.length - 1)).toBe('%');
         expect(Math.abs(66.67 - parseFloat(paddingTop))).toBeLessThan(0.05); // i.e. 100 x 500/750 %
+
+        const img = findRenderedDOMComponentWithTag(component, 'img');
+        expect(img.classList.contains('iiz__img--abs')).toBe(true);
       });
 
       it('ignores hasSpacer if width or height are not set', () => {
         innerImageZoom({ height: 500, hasSpacer: true });
         const wrapper = findRenderedDOMComponentWithTag(component, 'div');
         expect(wrapper.style['padding-top']).toNotExist();
+
+        const img = findRenderedDOMComponentWithTag(component, 'img');
+        expect(img.classList.contains('iiz__img--abs')).toBe(false);
       });
 
       it('hides the magnifying glass hint if hideHint is true', () => {

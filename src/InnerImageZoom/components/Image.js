@@ -11,9 +11,9 @@ const Image = ({ src, sources, width, height, hasSpacer, imgAttributes, isZoomed
         isZoomed ? ' iiz__img--hidden' : ''
       }${createSpacer ? ' iiz__img--abs' : ''}`}
       style={{
-        transition: `linear 0ms opacity ${isZoomed ? fadeDuration : 0}ms, linear ${fadeDuration}ms visibility ${
-          isZoomed ? fadeDuration : 0
-        }ms`
+        transition:
+          `opacity 0ms linear ${isZoomed ? fadeDuration : 0}ms, ` +
+          `visibility ${isZoomed ? 0 : fadeDuration}ms linear ${isZoomed ? fadeDuration : 0}ms`
       }}
       src={src}
       width={width}

@@ -197,10 +197,10 @@ const InnerImageZoom = ({
         }
       ],
       preventDefault: () => {
-        /* do nothing */
+        // do nothing
       },
       stopPropagation: () => {
-        /* do nothing */
+        // do nothing
       }
     });
   };

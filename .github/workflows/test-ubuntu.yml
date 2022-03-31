@@ -47,7 +47,7 @@ jobs:
         run: npx nwb test-react --karma.browsers=FirefoxHeadless --karma.browsers=ChromeHeadless
 
   test-react-17:
-    needs: test-react-16
+    #needs: test-react-16
 
     runs-on: ubuntu-latest
 
